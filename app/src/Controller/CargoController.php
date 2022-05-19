@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -8,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CargoController extends AbstractController
 {
-    #[Route('/cargo', name: 'app_cargo')]
+    #[Route('/', name: 'app_cargo')]
     public function index(): Response
     {
         return $this->render('cargo/index.html.twig', [
