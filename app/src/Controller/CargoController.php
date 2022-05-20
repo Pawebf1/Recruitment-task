@@ -24,11 +24,13 @@ class CargoController extends AbstractController
 
         $transport = new Transport();
 
-        
-        $transport->getCargos()->add(new Cargo());
+        for ($i = 0; $i < $cargoNumber; $i++) {
+            $transport->getCargos()->add(new Cargo());
+        }
 
         $transportForm = $this->createForm(TransportType::class, $transport);
         $transportForm->handleRequest($request);
+
 
         if ($transportForm->isSubmitted() && $transportForm->isValid()) {
             $entityManager = $doctrine->getManager();
