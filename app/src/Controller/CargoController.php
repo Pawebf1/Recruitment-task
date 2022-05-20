@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Cargo;
 use App\Entity\Transport;
-use App\Form\Type\CargoType;
+use App\Form\Type\TransportType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,40 +18,37 @@ class CargoController extends AbstractController
     public function index(Request $request, ManagerRegistry $doctrine): Response
     {
         $transport = new Transport();
-        $cargo = new Cargo();
-        
-        $cargoForm = $this->createForm(CargoType::class, [$transport, $cargo]);
-        $cargoForm->handleRequest($request);
+        $transport->getCargos()->add(new Cargo());
 
-        if ($cargoForm->isSubmitted() && $cargoForm->isValid()) {
+        $transportForm = $this->createForm(TransportType::class, $transport);
+        $transportForm->handleRequest($request);
+
+        if ($transportForm->isSubmitted() && $transportForm->isValid()) {
             $entityManager = $doctrine->getManager();
 
-            $transport->setTransportFrom($cargoForm->get('transportFrom')->getData());
-            $transport->setTransportTo($cargoForm->get('transportTo')->getData());
-            $transport->setPlane($cargoForm->get('plane')->getData());
-            $transport->setDate($cargoForm->get('date')->getData());
 
             $filesString = '';
-            foreach ($request->files->get("cargo")['document'] as $document) {
+            foreach ($request->files->get("transport")['documents'] as $document) {
                 $filesString .= $document->getClientOriginalName() . ' ';
             }
             $transport->setDocuments($filesString);
 
+
             $entityManager->persist($transport);
-            $entityManager->flush();
+
+            foreach ($transport->getCargos() as $cargo) {
+                $cargo->setTransportID($transport);
+                $entityManager->persist($cargo);
+            }
 
 
-            $cargo->setName($cargoForm->get('transportFrom')->getData());
-            $cargo->setWeight((double)$cargoForm->get('weight')->getData());
-            $cargo->setType($cargoForm->get('type')->getData());
-            $cargo->setTransportID($transport);
-            $entityManager->persist($cargo);
             $entityManager->flush();
         }
 
+
         return $this->render('cargo/index.html.twig', [
             'controller_name' => 'CargoController',
-            'form' => $cargoForm->createView()
+            'form' => $transportForm->createView()
         ]);
     }
 }
