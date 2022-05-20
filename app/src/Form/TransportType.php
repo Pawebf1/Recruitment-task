@@ -46,11 +46,6 @@ class TransportType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
 
-            ])
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-outline-primary'
-                ]
             ]);
     }
 

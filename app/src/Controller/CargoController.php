@@ -17,7 +17,14 @@ class CargoController extends AbstractController
     #[Route('/', name: 'app_cargo')]
     public function index(Request $request, ManagerRegistry $doctrine): Response
     {
+        $cargoNumber = 1;
+        if ($request->query->get("cargo_number") !== null) {
+            $cargoNumber = $request->query->get("cargo_number");
+        }
+
         $transport = new Transport();
+
+        
         $transport->getCargos()->add(new Cargo());
 
         $transportForm = $this->createForm(TransportType::class, $transport);
@@ -45,10 +52,10 @@ class CargoController extends AbstractController
             $entityManager->flush();
         }
 
-
         return $this->render('cargo/index.html.twig', [
             'controller_name' => 'CargoController',
-            'form' => $transportForm->createView()
+            'form' => $transportForm->createView(),
+            'cargoNumber' => $cargoNumber
         ]);
     }
 }
