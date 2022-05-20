@@ -34,6 +34,20 @@ services:
     volumes:
       - .:/var/www/html:cached
 
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ROOT
+      MYSQL_ROOT_PASSWORD: ROOT
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ROOT
+    ports:
+      - '8080:80'
+
 
 volumes:
   recruitment-task-db:
