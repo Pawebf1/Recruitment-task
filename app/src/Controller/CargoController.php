@@ -7,9 +7,13 @@ use App\Entity\Cargo;
 use App\Entity\Transport;
 use App\Form\Type\TransportType;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CargoController extends AbstractController
@@ -52,6 +56,21 @@ class CargoController extends AbstractController
 
 
             $entityManager->flush();
+
+
+            $body = '<p>cos</p>>';
+            $email = (new TemplatedEmail())
+                ->from('transport@samoloty.com')
+                ->to('jakisemail@samolot.com')
+                ->subject("Transport")
+                ->htmlTemplate('emails/transport.html.twig')
+                ->context([
+                    'username' => 'foo',
+                ]);
+
+
+            $mailer = new Mailer(\Symfony\Component\Mailer\Transport::fromDsn($_ENV["MAILER_DSN"]));
+            $mailer->send($email);
         }
 
         return $this->render('cargo/index.html.twig', [
