@@ -11,6 +11,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CargoController extends AbstractController
 {
     #[Route('/', name: 'app_cargo')]
-    public function index(Request $request, ManagerRegistry $doctrine): Response
+    public function index(Request $request, ManagerRegistry $doctrine, MailerInterface $mailer): Response
     {
         $cargoNumber = 1;
         if ($request->query->get("cargo_number") !== null) {
@@ -54,29 +55,40 @@ class CargoController extends AbstractController
                 $entityManager->persist($cargo);
             }
 
-
             $entityManager->flush();
 
+            try {
+                $this->sendEmail($transport);
+                $emailSent = true;
+            } catch (TransportExceptionInterface $e) {
+                $emailSent = false;
+            }
 
-            $body = '<p>cos</p>>';
-            $email = (new TemplatedEmail())
-                ->from('transport@samoloty.com')
-                ->to('jakisemail@samolot.com')
-                ->subject("Transport")
-                ->htmlTemplate('emails/transport.html.twig')
-                ->context([
-                    'username' => 'foo',
-                ]);
-
-
-            $mailer = new Mailer(\Symfony\Component\Mailer\Transport::fromDsn($_ENV["MAILER_DSN"]));
-            $mailer->send($email);
         }
 
         return $this->render('cargo/index.html.twig', [
             'controller_name' => 'CargoController',
             'form' => $transportForm->createView(),
-            'cargoNumber' => $cargoNumber
+            'cargoNumber' => $cargoNumber,
+            'emailSent' => $emailSent ?? null
         ]);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    private function sendEmail(Transport $transport): void
+    {
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to('you@example.com')
+            ->subject('Time for Symfony Mailer!')
+            ->text('Sending emails is fun again!')
+            ->html($this->renderView('emails/transport.html.twig', [
+                'username' => 'test'
+            ]));
+
+        $mailer = new Mailer(\Symfony\Component\Mailer\Transport::fromDsn($_ENV["MAILER_DSN"]));
+        $mailer->send($email);
     }
 }

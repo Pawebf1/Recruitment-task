@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Transport;
+use App\Validator\IsWorkday;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -38,6 +39,7 @@ class TransportType extends AbstractType
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
                 'data' => new \DateTime(),
+                'constraints' => [new IsWorkday()],
 
             ])
             ->add('cargos', CollectionType::class, [
