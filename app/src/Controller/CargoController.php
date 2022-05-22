@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CargoController extends AbstractController
 {
-    #[Route('/', name: 'app_cargo')]
+    #[Route('/', name: 'app_transport')]
     public function index(Request $request, ManagerRegistry $doctrine, MailerInterface $mailer): Response
     {
         $cargoNumber = 1;
@@ -103,5 +103,16 @@ class CargoController extends AbstractController
 
         $mailer = new Mailer(\Symfony\Component\Mailer\Transport::fromDsn($_ENV["MAILER_DSN"]));
         $mailer->send($email);
+    }
+
+
+    #[Route('/transport/list', name: 'app_transport_list')]
+    public function list(ManagerRegistry $doctrine): Response
+    {
+        $transports = $doctrine->getRepository(Transport::class)->findAll();
+
+        return $this->render('cargo/list.html.twig', [
+            'transports' => $transports
+        ]);
     }
 }

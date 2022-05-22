@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Transport List
+{% endblock %}
+
+{% block body %}
+
+    <h1>Transport list</h1>
+    <div class="row mt-5">
+        <div class="col">
+            <table class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Transport From</th>
+                    <th scope="col">Transport To</th>
+                    <th scope="col">Plane</th>
+                    <th scope="col">Documents</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Cargo id</th>
+                    <th scope="col">Cargo name</th>
+                    <th scope="col">Cargo weight</th>
+                    <th scope="col">Cargo type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for transport in transports %}
+                    <tr>
+                        <th scope="row">{{ transport.id }}</th>
+                        <td>{{ transport.transportFrom }}</td>
+                        <td>{{ transport.transportTo }}</td>
+                        <td>{{ transport.plane }}</td>
+                        <td>{{ transport.documents }}</td>
+                        <td>{{ transport.date|date('Y-m-d') }}</td>
+                        {% for cargo in transport.cargos %}
+                            <th>{{ cargo.id }}</th>
+                            <td>{{ cargo.name }}</td>
+                            <td>{{ cargo.weight }}</td>
+                            <td>{{ cargo.type }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
