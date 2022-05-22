@@ -3,11 +3,19 @@
 {% block title %}Cargo Form{% endblock %}
 
 {% block body %}
-
     <div class="container my-5">
-        <h1>Cargo form</h1>
+        <h1>Transport form</h1>
         <div class="row mt-5">
             <div class="col">
+
+                {% if emailSent is not null %}
+                    {% if emailSent == true %}
+                        <p class="text-success">Form saved in db and email was sent</p>
+                    {% else %}
+                        <p class="text-danger">Form saved in db but email hasn't been sent</p>
+                    {% endif %}
+                {% endif %}
+
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <div class="btn-group" role="group" aria-label="buttons">
