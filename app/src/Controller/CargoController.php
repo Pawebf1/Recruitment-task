@@ -62,7 +62,7 @@ class CargoController extends AbstractController
             $entityManager->flush();
 
             try {
-                $this->sendEmail($transport, $request);
+                $this->sendEmail($transport, $filesPath);
                 $emailSent = true;
             } catch (TransportExceptionInterface $e) {
                 $emailSent = false;
@@ -81,7 +81,7 @@ class CargoController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    private function sendEmail(Transport $transport, Request $request): void
+    private function sendEmail(Transport $transport, array $filesPath): void
     {
         if ($transport->getPlane() == "Airbus A380")
             $to = "airbus@lemonmind.com";
@@ -97,9 +97,9 @@ class CargoController extends AbstractController
                 'transport' => $transport
             ]));
 
-        foreach ($request->files->get("transport")['documents'] as $document) {
-            $email->attachFromPath($document->getPathName(), $document->getClientOriginalName());
-        }
+        foreach ($filesPath as $filepath)
+            $email->attachFromPath($this->getParameter('documents_directory') . '/' . $filepath, $filepath);
+
 
         $mailer = new Mailer(\Symfony\Component\Mailer\Transport::fromDsn($_ENV["MAILER_DSN"]));
         $mailer->send($email);
