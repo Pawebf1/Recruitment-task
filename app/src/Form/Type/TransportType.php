@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\Transport;
+use App\Validator\IsGoodFileType;
 use App\Validator\IsWorkday;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
@@ -34,6 +35,7 @@ class TransportType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'mapped' => false,
+                'constraints' => [new IsGoodFileType()],
 
             ])
             ->add('date', DateType::class, [
