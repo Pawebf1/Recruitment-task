@@ -1,3 +1,35 @@
 <div>
-    <h1>Welcome {{ username }}!</h1>
+    <table>
+        <tr>
+            <th>Transport from</th>
+            <th>{{ transport.transportFrom }}</th>
+        </tr>
+        <tr>
+            <th>Transport to</th>
+            <th>{{ transport.transportTo }}</th>
+        </tr>
+        <tr>
+            <th>Plane</th>
+            <th>{{ transport.plane }}</th>
+        </tr>
+        <tr>
+            <th>Transport date</th>
+            <th>{{ transport.date|date('Y-m-d') }}</th>
+        </tr>
+
+        {% for cargo in transport.cargos %}
+            <tr>
+                <th>Cargo name</th>
+                <th>{{ cargo.name }}</th>
+            </tr>
+            <tr>
+                <th>Cargo weight</th>
+                <th>{{ cargo.weight }}</th>
+            </tr>
+            <tr>
+                <th>Cargo type</th>
+                <th>{{ cargo.type }}</th>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
