@@ -24,7 +24,7 @@ Documents uploaded in form are stored in storage/documents/
 git clone https://github.com/Pawebf1/Recruitment-task.git
 cd Recruitment-task
 docker-compose up -d
-docker-compose exec recruitment-task-php bash -c "composer install; php bin/console doctrine:migrations:migrate"
+docker exec -it recruitment-task-php bash -c "composer install; php bin/console doctrine:migrations:migrate"
 ```
 
 ## Screenshots
