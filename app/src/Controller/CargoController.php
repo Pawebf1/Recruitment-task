@@ -42,8 +42,12 @@ class CargoController extends AbstractController
 
 
             $filesString = '';
+            $filesPath = [];
             foreach ($request->files->get("transport")['documents'] as $document) {
-                $filesString .= $document->getClientOriginalName() . ' ';
+                $newFilename = $document->getClientOriginalName() . '-' . uniqid() . '.' . $document->guessExtension();
+                $filesString .= $newFilename . ' ';
+                $filesPath[] = $newFilename;
+                $document->move($this->getParameter('documents_directory'), $newFilename);
             }
             $transport->setDocuments($filesString);
 
