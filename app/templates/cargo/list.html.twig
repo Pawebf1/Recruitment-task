@@ -18,10 +18,7 @@
                     <th scope="col">Plane</th>
                     <th scope="col">Documents</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Cargo id</th>
-                    <th scope="col">Cargo name</th>
-                    <th scope="col">Cargo weight</th>
-                    <th scope="col">Cargo type</th>
+                    <th scope="col">Cargos</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,12 +30,8 @@
                         <td>{{ transport.plane }}</td>
                         <td>{{ transport.documents }}</td>
                         <td>{{ transport.date|date('Y-m-d') }}</td>
-                        {% for cargo in transport.cargos %}
-                            <th>{{ cargo.id }}</th>
-                            <td>{{ cargo.name }}</td>
-                            <td>{{ cargo.weight }}</td>
-                            <td>{{ cargo.type }}</td>
-                        {% endfor %}
+                        <td><a href="/cargo/list?id={{ transport.id }}">View cargo
+                                list</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

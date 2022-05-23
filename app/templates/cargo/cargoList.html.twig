@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Cargo List
+{% endblock %}
+
+{% block body %}
+
+    <h1>Cargo list</h1>
+    <div class="row mt-5">
+        <div class="col">
+            <table class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Cargo id</th>
+                    <th scope="col">Cargo name</th>
+                    <th scope="col">Cargo weight</th>
+                    <th scope="col">Cargo type</th>
+                    <th scope="col">TransportID</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for cargo in cargos %}
+                    <tr>
+                        <th scope="row">{{ cargo.id }}</th>
+                        <td>{{ cargo.name }}</td>
+                        <td>{{ cargo.weight }}</td>
+                        <td>{{ cargo.type }}</td>
+                        <td>{{ cargo.transportID.id }}</td>
+                    </tr>
+                {% endfor %}
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
