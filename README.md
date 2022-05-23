@@ -7,10 +7,19 @@ It consists of the following:
 * MariaDB: 10.7
 * phpMyAdmin: latest
 
+# Description
+
 Main page is at [localhost:80]()
 
 All transport and cargo can be seen at [localhost/transport/list]() or at [localhost:8080]() in phpMyAdmin.
 Documents uploaded in form are stored in storage/documents/
+
+## Realized
+
+* Form
+* Validation of date and files field
+* Saving form in db
+* Sending emails
 
 ## Installation
 
@@ -49,6 +58,10 @@ php bin/console doctrine:migrations:migrate
 ### View at /transport/list
 
 ![](screenshots/transport_list.png)
+
+### View at /cargo/list?id
+
+![](screenshots/cargo_list.png)
 
 ### View in phpMyAdmin
 
