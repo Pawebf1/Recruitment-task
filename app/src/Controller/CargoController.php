@@ -119,14 +119,18 @@ class CargoController extends AbstractController
     #[Route('/cargo/list', name: 'app_cargo_list')]
     public function cargoList(Request $request, ManagerRegistry $doctrine): Response
     {
-        if ($request->query->get("id") !== null) {
+        if ($request->query->get("id") !== null)
             $id = $request->query->get("id");
-        }
+        else
+            return $this->render('cargo/cargoList.html.twig', [
+                'id' => false]);
+
         $transport = $doctrine->getRepository(Transport::class)->findBy(['id' => $id]);
         $cargos = $doctrine->getRepository(Cargo::class)->findBy(['transportID' => $transport]);
 
         return $this->render('cargo/cargoList.html.twig', [
-            'cargos' => $cargos
+            'cargos' => $cargos,
+            'id' => true
         ]);
     }
 }
