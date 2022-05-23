@@ -12,7 +12,7 @@ It consists of the following:
 Main page is at [localhost:80]()
 
 All transport and cargo can be seen at [localhost/transport/list]() or at [localhost:8080]() in phpMyAdmin.
-Documents uploaded in form are stored in storage/documents/
+Documents uploaded in form are stored in storage/uploads/documents/
 
 ## Realized
 
