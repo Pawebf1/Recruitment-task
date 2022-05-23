@@ -9,6 +9,7 @@ use App\Form\Type\TransportType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -45,7 +46,7 @@ class CargoController extends AbstractController
             $filesPath = [];
             foreach ($request->files->get("transport")['documents'] as $document) {
                 $newFilename = $document->getClientOriginalName() . '-' . uniqid() . '.' . $document->guessExtension();
-                $filesString .= $newFilename . ' ';
+                $filesString .= $newFilename . ', ';
                 $filesPath[] = $newFilename;
                 $document->move($this->getParameter('documents_directory'), $newFilename);
             }
@@ -112,8 +113,24 @@ class CargoController extends AbstractController
         $transports = $doctrine->getRepository(Transport::class)->findAll();
 
         return $this->render('cargo/list.html.twig', [
-            'transports' => $transports
+            'transports' => $transports,
         ]);
+    }
+
+    #[Route('/transport/{filename}', name: 'app_transport_file')]
+    public function downloadAction($filename, Request $request): Response
+    {
+        $path = $this->getParameter('documents_directory') . '/';
+        $content = file_get_contents($path . $filename);
+
+        $response = new Response();
+
+        //set headers
+        $response->headers->set('Content-Type', 'mime/type');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename);
+
+        $response->setContent($content);
+        return $response;
     }
 
     #[Route('/cargo/list', name: 'app_cargo_list')]

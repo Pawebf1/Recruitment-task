@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block body %}
-
     <h1>Transport list</h1>
     <div class="row mt-5">
         <div class="col">
@@ -28,7 +27,13 @@
                         <td>{{ transport.transportFrom }}</td>
                         <td>{{ transport.transportTo }}</td>
                         <td>{{ transport.plane }}</td>
-                        <td>{{ transport.documents }}</td>
+                        <td>
+                            {% set documents = transport.documents|split(',') %}
+                            {% for document in documents %}
+                                <a href="{{ document }}"> {{ document }} </a>
+                                <br>
+                            {% endfor %}
+                        </td>
                         <td>{{ transport.date|date('Y-m-d') }}</td>
                         <td><a href="/cargo/list?id={{ transport.id }}">View cargo
                                 list</a></td>
